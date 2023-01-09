@@ -137,6 +137,7 @@ public class UmsMemberServiceImpl implements UmsMemberService {
 
     @Override
     public UmsMember getCurrentMember() {
+        //从securitycontex中获取用户信息
         SecurityContext ctx = SecurityContextHolder.getContext();
         Authentication auth = ctx.getAuthentication();
         MemberDetails memberDetails = (MemberDetails) auth.getPrincipal();

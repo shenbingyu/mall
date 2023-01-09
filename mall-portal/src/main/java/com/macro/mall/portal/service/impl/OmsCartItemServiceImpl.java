@@ -43,6 +43,7 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
         cartItem.setMemberNickname(currentMember.getNickname());
         cartItem.setDeleteStatus(0);
         OmsCartItem existCartItem = getCartItem(cartItem);
+        //如果购物车中没有此商品就插入，如果已经有改商品就增加
         if (existCartItem == null) {
             cartItem.setCreateDate(new Date());
             count = cartItemMapper.insert(cartItem);

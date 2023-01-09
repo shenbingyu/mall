@@ -38,18 +38,22 @@ import java.util.Map;
 public class WebLogAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
 
+    //配置切入点-- 此方法不会被执行
     @Pointcut("execution(public * com.macro.mall.controller.*.*(..))||execution(public * com.macro.mall.*.controller.*.*(..))")
     public void webLog() {
     }
 
+    //前置通知
     @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
     }
 
+    //后置通知
     @AfterReturning(value = "webLog()", returning = "ret")
     public void doAfterReturning(Object ret) throws Throwable {
     }
 
+    //环绕通知
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
@@ -58,6 +62,7 @@ public class WebLogAspect {
         HttpServletRequest request = attributes.getRequest();
         //记录请求信息(通过Logstash传入Elasticsearch)
         WebLog webLog = new WebLog();
+        //执行controller方法
         Object result = joinPoint.proceed();
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;

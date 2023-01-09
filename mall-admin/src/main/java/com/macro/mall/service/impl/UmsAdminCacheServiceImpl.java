@@ -91,12 +91,15 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public UmsAdmin getAdmin(String username) {
+        //mall:ums:admin:admin
         String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + username;
+        //获取key
         return (UmsAdmin) redisService.get(key);
     }
 
     @Override
     public void setAdmin(UmsAdmin admin) {
+        //mall:ums:admin:admin
         String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
         redisService.set(key, admin, REDIS_EXPIRE);
     }

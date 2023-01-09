@@ -58,9 +58,16 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private UmsAdminLoginLogMapper loginLogMapper;
 
+    /**
+     * 获取用户信息方法
+     * @param username 用户名称
+     * @return admin
+     */
     @Override
     public UmsAdmin getAdminByUsername(String username) {
+        //从redis中查找用户信息
         UmsAdmin admin = getCacheService().getAdmin(username);
+        //如果不为空返回admin
         if(admin!=null) return  admin;
         UmsAdminExample example = new UmsAdminExample();
         example.createCriteria().andUsernameEqualTo(username);
@@ -98,6 +105,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         String token = null;
         //密码需要客户端加密后传递
         try {
+            //查找用户信息
             UserDetails userDetails = loadUserByUsername(username);
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 Asserts.fail("密码不正确");
@@ -105,6 +113,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             if(!userDetails.isEnabled()){
                 Asserts.fail("帐号已被禁用");
             }
+
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
@@ -222,12 +231,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsResource> getResourceList(Long adminId) {
+        //从缓存中查找
         List<UmsResource> resourceList = getCacheService().getResourceList(adminId);
         if(CollUtil.isNotEmpty(resourceList)){
             return  resourceList;
         }
         resourceList = adminRoleRelationDao.getResourceList(adminId);
         if(CollUtil.isNotEmpty(resourceList)){
+            //写入缓存
             getCacheService().setResourceList(adminId,resourceList);
         }
         return resourceList;
@@ -261,6 +272,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         //获取用户信息
         UmsAdmin admin = getAdminByUsername(username);
         if (admin != null) {
+            //获取要显示的功能
             List<UmsResource> resourceList = getResourceList(admin.getId());
             return new AdminUserDetails(admin,resourceList);
         }

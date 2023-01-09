@@ -29,10 +29,19 @@ public class JwtTokenUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
+    /**
+     * 秘钥
+     */
     @Value("${jwt.secret}")
     private String secret;
+    /**
+     * 过期时间
+     */
     @Value("${jwt.expiration}")
     private Long expiration;
+    /**
+     * token头
+     */
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
@@ -42,7 +51,9 @@ public class JwtTokenUtil {
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
+                //设置过期时间的毫秒值
                 .setExpiration(generateExpirationDate())
+                //设置签名算法
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
