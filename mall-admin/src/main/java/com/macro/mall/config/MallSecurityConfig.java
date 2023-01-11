@@ -26,12 +26,18 @@ public class MallSecurityConfig {
     @Autowired
     private UmsResourceService resourceService;
 
+    /**
+     * 身份校验配置
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> adminService.loadUserByUsername(username);
     }
 
+    /**
+     * 权限校验配置
+     */
     @Bean
     public DynamicSecurityService dynamicSecurityService() {
         return new DynamicSecurityService() {

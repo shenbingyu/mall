@@ -106,7 +106,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         String token = null;
         //密码需要客户端加密后传递
         try {
-            //查找用户信息
+            //查找用户信息--并获取权限列表--存入redis
             UserDetails userDetails = loadUserByUsername(username);
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 Asserts.fail("密码不正确");
@@ -119,6 +119,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
 //            updateLoginTimeByUsername(username);
+            //登录日志写入mysql
             insertLoginLog(username);
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常:{}", e.getMessage());
