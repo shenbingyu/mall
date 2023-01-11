@@ -141,6 +141,7 @@ public class JwtTokenUtil {
         if(StrUtil.isEmpty(oldToken)){
             return null;
         }
+        //截取tokenHead部分
         String token = oldToken.substring(tokenHead.length());
         if(StrUtil.isEmpty(token)){
             return null;
