@@ -114,6 +114,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.macro.mall.model.SmsCoupon">
+/*获取插入后的id--只适用于自增主键*/
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
