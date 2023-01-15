@@ -52,9 +52,10 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
             }
         }
         //此处会调用AccessDecisionManager中的decide方法进行鉴权操作
+        //这里会执行两次推荐使用-sa-token
         InterceptorStatusToken token = super.beforeInvocation(fi);
         try {
-            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+          fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
         } finally {
             super.afterInvocation(token, null);
         }
