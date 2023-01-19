@@ -18,7 +18,9 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode
+//设置索引名称
 @Document(indexName = "pms")
+//创建一个索引的分片，索引的副本数量
 @Setting(shards = 1,replicas = 0)
 public class EsProduct implements Serializable {
     private static final long serialVersionUID = -1L;

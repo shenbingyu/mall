@@ -17,7 +17,7 @@ spring:
       repositories:
         enabled: true
   elasticsearch:
-    uris: localhost:9200
+    uris: 192.168.200.223:9200
 
 logging:
   level:
@@ -25,5 +25,10 @@ logging:
     com.macro.mall: debug
 
 logstash:
-  host: localhost
+  host: 192.168.200.223
   enableInnerLog: false
+
+management:
+  health:
+    redis:
+      enabled: false
